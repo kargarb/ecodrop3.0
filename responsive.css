@@ -1,0 +1,135 @@
+/* =============================================
+   EcoDrop — responsive.css
+   Agregar en index.html antes de </head>:
+   <link rel="stylesheet" href="responsive.css">
+   ============================================= */
+
+/* ─── FORZAR VISIBILIDAD GENERAL ─── */
+/* Asegura que nada quede invisible por animaciones */
+* { opacity: 1 !important; }
+
+nav a.cta-btn-sm,
+.hero-visual,
+.chip1, .chip2,
+.flow-arrow,
+.success-msg {
+  /* Estos sí pueden ser invisibles según contexto */
+}
+
+/* Reset selectivo de opacidad para elementos que sí deben ocultarse */
+.success-msg { opacity: 1 !important; display: none; }
+/* ─── TABLET (≤ 1024px) ─── */
+@media (max-width: 1024px) {
+  .hero-inner { gap: 2.5rem; }
+  .device-card { max-width: 300px; }
+  .chip1, .chip2 { display: none; }
+}
+
+/* ─── TABLET CHICA / MÓVIL GRANDE (≤ 900px) ─── */
+@media (max-width: 900px) {
+  /* Nav */
+
+  /* Hero */
+  .hero { padding: 7rem 5% 4rem; }
+  .hero-inner {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+  }
+  .hero-visual { display: none; }
+  .hero-sub { max-width: 100%; margin-left: auto; margin-right: auto; }
+  .hero-form { justify-content: center; }
+  .hero-badge { justify-content: center; }
+
+  /* Secciones */
+  .section { padding: 4rem 5%; }
+  .how-bg { padding: 4rem 5%; }
+
+  /* Cómo funciona */
+  .stages-flow {
+    grid-template-columns: 1fr 1fr !important;
+    gap: .8rem;
+  }
+  .flow-arrow { display: none; }
+
+  /* Beneficios */
+  .benefits-grid { grid-template-columns: 1fr 1fr !important; }
+
+  /* Precios */
+  .pricing-wrap {
+    grid-template-columns: 1fr !important;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .pricing-card.featured { transform: none !important; }
+
+  /* Calculadora */
+  .calc-grid { grid-template-columns: 1fr !important; gap: 1.5rem; }
+  .calc-results { position: static !important; }
+
+  /* Preorder */
+  .preorder-section { padding: 4rem 5%; }
+  .preorder-form { padding: 1.8rem; }
+  .form-grid { grid-template-columns: 1fr !important; }
+}
+
+/* ─── MÓVIL (≤ 600px) ─── */
+@media (max-width: 600px) {
+  /* Nav */
+  nav { padding: 1rem 4%; }
+  .nav-logo { font-size: 1.3rem; }
+
+  /* Hero */
+  .hero { padding: 6rem 4% 3rem; }
+  .hero-form { flex-direction: column; }
+  .hero-form input[type="email"] {
+    min-width: unset !important;
+    width: 100%;
+  }
+  .btn-primary { width: 100%; text-align: center; }
+
+  /* Tipografía */
+  h1 { font-size: clamp(2rem, 8vw, 2.8rem) !important; }
+  h2 { font-size: clamp(1.6rem, 6vw, 2.2rem) !important; }
+
+  /* Secciones */
+  .section { padding: 3rem 4%; }
+  .how-bg { padding: 3rem 4%; }
+
+  /* Cómo funciona */
+  .stages-flow { grid-template-columns: 1fr !important; }
+  .flow-step { padding: 1.4rem 1rem; }
+
+  /* Beneficios */
+  .benefits-grid { grid-template-columns: 1fr !important; }
+  .benefit-num { font-size: 2.2rem; }
+
+  /* Precios */
+  .pricing-header { padding: 1.5rem 1.5rem 1.2rem; }
+  .pricing-body { padding: 1.4rem 1.5rem; }
+  .plan-price { font-size: 2rem; }
+
+  /* Calculadora */
+  .calc-section { padding: 3rem 4%; }
+  .calc-card { padding: 1.5rem; }
+  .calc-results { padding: 1.5rem; }
+  .calc-savings-hero .savings-amount { font-size: 2.2rem; }
+
+  /* Preorder */
+  .preorder-section { padding: 3rem 4%; }
+  .preorder-inner { text-align: left; }
+  .preorder-form { padding: 1.4rem; }
+  .preorder-cta { font-size: .92rem; }
+
+  /* Footer */
+  footer { padding: 2.5rem 4%; }
+  footer p { font-size: .78rem; }
+}
+
+/* ─── MÓVIL MUY CHICO (≤ 380px) ─── */
+@media (max-width: 380px) {
+  h1 { font-size: 1.9rem !important; }
+  .hero-badge { font-size: .7rem; }
+  .calc-result-value { font-size: 1.1rem; }
+  .calc-result-row.highlight .calc-result-value { font-size: 1.4rem; }
+}
