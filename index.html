@@ -1256,34 +1256,51 @@
   // IMPORTANTE: reemplaza esta URL con la de tu Google Apps Script desplegado
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPu_LSwTwNqjkMKzWliuGEZTtVFXp69gfujN5YpGO14AYF6_IC-CkQJ28eJ415O172/exec';
 
-  document.getElementById('preorder-form').addEventListener('submit', async function(e) {
+  document.getElementById('preorder-form').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const btn = document.getElementById('btn-submit');
     btn.textContent = 'Enviando...';
     btn.disabled = true;
 
-    const datos = {
-      nombre:   document.getElementById('f-nombre').value,
-      correo:   document.getElementById('f-correo').value,
-      telefono: document.getElementById('f-telefono').value,
-      zona:     document.getElementById('f-zona').value,
-      plan:     document.getElementById('f-plan').value
-    };
+    // Usar FormData evita el problema de CORS con Apps Script
+    const formData = new FormData();
+    formData.append('nombre',   document.getElementById('f-nombre').value);
+    formData.append('correo',   document.getElementById('f-correo').value);
+    formData.append('telefono', document.getElementById('f-telefono').value);
+    formData.append('zona',     document.getElementById('f-zona').value);
+    formData.append('plan',     document.getElementById('f-plan').value);
 
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-      });
-    } catch (err) {
-      // no-cors no lanza error aunque falle, pero igual mostramos éxito
-      // porque el dato normalmente sí llega
-    }
+    // Creamos un iframe oculto para enviar sin recargar la página
+    // (única forma 100% confiable con Apps Script desde GitHub Pages)
+    const iframe = document.createElement('iframe');
+    iframe.name = 'hidden-iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-    // Mostrar mensaje de éxito
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = SCRIPT_URL;
+    form.target = 'hidden-iframe';
+
+    ['nombre','correo','telefono','zona','plan'].forEach(campo => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = campo;
+      input.value = document.getElementById('f-' + campo).value;
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+
+    // Limpiar después de enviar
+    setTimeout(() => {
+      document.body.removeChild(form);
+      document.body.removeChild(iframe);
+    }, 3000);
+
+    // Mostrar mensaje de éxito inmediatamente
     document.getElementById('preorder-form').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
     document.querySelector('.form-disclaimer').style.display = 'none';
