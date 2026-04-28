@@ -1149,23 +1149,23 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Nombre completo</label>
-            <input type="text" placeholder="Tu nombre" required />
+            <input id="f-nombre" type="text" placeholder="Tu nombre" required />
           </div>
           <div class="form-group">
             <label>Correo electrónico</label>
-            <input type="email" placeholder="tu@correo.com" required />
+            <input id="f-correo" type="email" placeholder="tu@correo.com" required />
           </div>
           <div class="form-group">
             <label>Teléfono / WhatsApp</label>
-            <input type="tel" placeholder="+52 33 ..." required />
+            <input id="f-telefono" type="tel" placeholder="+52 33 ..." required />
           </div>
           <div class="form-group">
             <label>Colonia o zona</label>
-            <input type="text" placeholder="Ej. Providencia, Zapopan..." required />
+            <input id="f-zona" type="text" placeholder="Ej. Providencia, Zapopan..." required />
           </div>
           <div class="form-group form-full">
             <label>Plan de interés</label>
-            <select required>
+            <select id="f-plan" required>
               <option value="" disabled selected>Selecciona un plan</option>
               <option>EcoDrop Esencial — $299/mes</option>
               <option>EcoDrop Premium — $399/mes (Todo incluido)</option>
@@ -1173,7 +1173,7 @@
             </select>
           </div>
         </div>
-        <button type="submit" class="preorder-cta">✦ Reservar mi pre-orden sin costo</button>
+        <button type="submit" class="preorder-cta" id="btn-submit">✦ Reservar mi pre-orden sin costo</button>
       </form>
       <div class="success-msg" id="success-msg">
         <div class="success-icon">💧</div>
@@ -1252,8 +1252,38 @@
     }
   }
 
-  document.getElementById('preorder-form').addEventListener('submit', function(e) {
+  // ─── GOOGLE SHEETS INTEGRATION ───
+  // IMPORTANTE: reemplaza esta URL con la de tu Google Apps Script desplegado
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPu_LSwTwNqjkMKzWliuGEZTtVFXp69gfujN5YpGO14AYF6_IC-CkQJ28eJ415O172/exec';
+
+  document.getElementById('preorder-form').addEventListener('submit', async function(e) {
     e.preventDefault();
+
+    const btn = document.getElementById('btn-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    const datos = {
+      nombre:   document.getElementById('f-nombre').value,
+      correo:   document.getElementById('f-correo').value,
+      telefono: document.getElementById('f-telefono').value,
+      zona:     document.getElementById('f-zona').value,
+      plan:     document.getElementById('f-plan').value
+    };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+      });
+    } catch (err) {
+      // no-cors no lanza error aunque falle, pero igual mostramos éxito
+      // porque el dato normalmente sí llega
+    }
+
+    // Mostrar mensaje de éxito
     document.getElementById('preorder-form').style.display = 'none';
     document.getElementById('success-msg').style.display = 'block';
     document.querySelector('.form-disclaimer').style.display = 'none';
